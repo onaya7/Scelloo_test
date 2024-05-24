@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scelloo_test/injection_container.dart';
 import 'package:toastification/toastification.dart';
 
+import '../../core/instance/logger.dart';
 import '../constants/color_constants.dart';
 
 class Helpers {
@@ -76,7 +77,7 @@ class Helpers {
       getIt<GlobalKey<NavigatorState>>();
 
   static navigateToPage(String routeName, {Object? arguments}) {
-    debugPrint(
+    logger.i(
         ':::::::::::::::::::::::::::Navigating to $routeName::::::::::::::::::::::::::::');
     navigatorKey.currentState!.pushNamed(routeName, arguments: arguments);
   }
@@ -86,14 +87,14 @@ class Helpers {
   }
 
   static navigateToPageAndReplace(String routeName, {Object? arguments}) {
-    debugPrint(
+    logger.i(
         ':::::::::::::::::::::::::::Navigating to $routeName::::::::::::::::::::::::::::');
     navigatorKey.currentState!
         .pushReplacementNamed(routeName, arguments: arguments);
   }
 
   static navigateToPageAndRemoveUntil(String routeName, {Object? arguments}) {
-    debugPrint(
+    logger.i(
         ':::::::::::::::::::::::::::Navigating to $routeName::::::::::::::::::::::::::::');
     navigatorKey.currentState!.pushNamedAndRemoveUntil(
         routeName, (route) => false,
