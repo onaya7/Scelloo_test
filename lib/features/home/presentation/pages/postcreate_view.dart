@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:scelloo_test/componenets/custom_button.dart';
 import 'package:scelloo_test/componenets/custom_inputfield_label.dart';
@@ -6,8 +7,10 @@ import 'package:scelloo_test/componenets/custom_scaffold.dart';
 import 'package:scelloo_test/utils/helpers/helpers.dart';
 
 import '../../../../componenets/custom_inputfield.dart';
+import '../../../../injection_container.dart';
 import '../../../../utils/constants/color_constants.dart';
 import '../../../../utils/validators/validators.dart';
+import '../bloc/home_bloc.dart';
 
 class PostCreateView extends StatefulWidget {
   const PostCreateView({super.key});
@@ -65,60 +68,83 @@ class _PostCreateViewState extends State<PostCreateView> {
           onPressed: () => Helpers.popPage(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const CustomInputFieldLabel(
-                      label: 'Title',
-                    ),
-                    const Gap(5),
-                    CustomInputField(
-                      controller: _titleController,
-                      currentFocus: _titleFocus,
-                      nextFocus: _bodyFocus,
-                      hintText: 'Please give a descriptive title',
-                      action: TextInputAction.next,
-                      validator: (value) => Validators.validateTitle(value),
-                      onChanged: (value) => checkValidity(),
-                    ),
-                    const Gap(20),
-                    const CustomInputFieldLabel(
-                      label: 'Body',
-                    ),
-                    const Gap(5),
-                    CustomInputField(
-                      controller: _bodyController,
-                      maxlines: 5,
-                      currentFocus: _bodyFocus,
-                      hintText: 'Give detailed body of the post .........',
-                      action: TextInputAction.done,
-                      validator: (value) => Validators.validateBody(value),
-                      onChanged: (value) => checkValidity(),
-                    ),
-                  ],
+      body: BlocListener<HomeBloc, HomeState>(
+        bloc: getIt.call<HomeBloc>(),
+        listener: (context, state) {
+          if (state is PostCreateErrorState) {
+            final postErrorState = state;
+            Helpers.showToast(context, 'error', postErrorState.error);
+          } else if (state is PostCreateLoadedState) {
+            Helpers.showToast(context, 'success', 'Post created successfully');
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const CustomInputFieldLabel(
+                        label: 'Title',
+                      ),
+                      const Gap(5),
+                      CustomInputField(
+                        controller: _titleController,
+                        currentFocus: _titleFocus,
+                        nextFocus: _bodyFocus,
+                        hintText: 'Please give a descriptive title',
+                        action: TextInputAction.next,
+                        validator: (value) => Validators.validateTitle(value),
+                        onChanged: (value) => checkValidity(),
+                      ),
+                      const Gap(20),
+                      const CustomInputFieldLabel(
+                        label: 'Body',
+                      ),
+                      const Gap(5),
+                      CustomInputField(
+                        controller: _bodyController,
+                        maxlines: 5,
+                        currentFocus: _bodyFocus,
+                        hintText: 'Give detailed body of the post .........',
+                        action: TextInputAction.done,
+                        validator: (value) => Validators.validateBody(value),
+                        onChanged: (value) => checkValidity(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const Gap(20),
-              CustomButton(
-                text: 'Save',
-                textColor: ColorConstants.white,
-                backgroundColor: _formCompleted
-                    ? ColorConstants.primary
-                    : ColorConstants.neutral300,
-                onPressed: _formCompleted ? () => onContinue(context) : null,
-              ),
-            ],
+                const Gap(20),
+                CustomButton(
+                  text: 'Save',
+                  textColor: ColorConstants.white,
+                  backgroundColor: _formCompleted
+                      ? ColorConstants.primary
+                      : ColorConstants.neutral300,
+                  onPressed: _formCompleted ? () => onContinue(context) : null,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  onContinue(BuildContext context) {}
+  onContinue(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      getIt.call<HomeBloc>().add(
+            PostCreateEvent(
+              post: {
+                'title': _titleController.text,
+                'body': _bodyController.text,
+                'userId': 8,
+              },
+            ),
+          );
+    }
+  }
 }

@@ -9,6 +9,8 @@ class DioClient implements ApiClient {
   String baseUrl = ApiConstants.baseUrl;
 
   DioClient(this._dio) {
+    _dio.options.connectTimeout = const Duration(seconds: 30);
+    _dio.options.receiveTimeout = const Duration(seconds: 60);
     _dio.options.baseUrl = ApiConstants.baseUrl;
     _dio.interceptors.add(ApiInterceptor());
     _dio.options.headers['Content-Type'] = 'application/json';
@@ -30,13 +32,11 @@ class DioClient implements ApiClient {
     }
   }
 
-  
-
   @override
   Future<Response> post(String path, {Map<String, dynamic>? data}) async {
     try {
       final response = await _dio.post(path, data: data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return response;
       }
       throw 'An unexpected error occurred';

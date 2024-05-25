@@ -17,7 +17,6 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response = await remoteDataSource.fetchPosts();
       post = response.map((post) => Post.fromJson(post)).toList();
-      logger.d('post: $post');
       return post;
     } on DioException catch (e) {
       var error = AppException.fromDioError(e);
@@ -32,7 +31,6 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response = await remoteDataSource.fetchPostDetails(id);
       post = Post.fromJson(response);
-      logger.d('post: $post');
       return post;
     } on DioException catch (e) {
       var error = AppException.fromDioError(e);
@@ -47,7 +45,7 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response = await remoteDataSource.createPost(data);
       post = Post.fromJson(response);
-      logger.d('post: $post');
+      logger.i('post: $post');
       return post;
     } on DioException catch (e) {
       var error = AppException.fromDioError(e);
@@ -62,7 +60,6 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response = await remoteDataSource.updatePost(id, data);
       post = Post.fromJson(response);
-      logger.d('post: $post');
       return post;
     } on DioException catch (e) {
       var error = AppException.fromDioError(e);
@@ -77,7 +74,6 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final response = await remoteDataSource.deletePost(id);
       post = Post.fromJson(response);
-      logger.d('post: $post');
       return post;
     } on DioException catch (e) {
       var error = AppException.fromDioError(e);

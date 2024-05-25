@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scelloo_test/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:scelloo_test/features/home/domain/repositories/home_repository.dart';
+import 'package:scelloo_test/features/home/domain/usecases/create_post.dart';
 import 'package:scelloo_test/features/home/domain/usecases/get_posts.dart';
 
 import 'core/network/api_client.dart';
@@ -35,7 +36,9 @@ void init() {
   //HomeBloc
   getIt.registerLazySingleton<HomeBloc>(() => HomeBloc());
 
-  //GetPosts
+  //UseCases ----------------------------------------------
   getIt
       .registerLazySingleton<GetPosts>(() => GetPosts(getIt<HomeRepository>()));
+  getIt.registerLazySingleton<CreatePost>(
+      () => CreatePost(getIt<HomeRepository>()));
 }

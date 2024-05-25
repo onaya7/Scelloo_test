@@ -22,13 +22,6 @@ class _PostEditViewState extends State<PostEditView> {
   final TextEditingController _bodyController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
   final FocusNode _bodyFocus = FocusNode();
-  late bool _formCompleted;
-
-  @override
-  void initState() {
-    super.initState();
-    _formCompleted = false;
-  }
 
   @override
   void dispose() {
@@ -37,18 +30,6 @@ class _PostEditViewState extends State<PostEditView> {
     _bodyController.dispose();
     _titleFocus.dispose();
     _bodyFocus.dispose();
-  }
-
-  Future<void> checkValidity() async {
-    if (_titleController.text.isNotEmpty && _bodyController.text.isNotEmpty) {
-      setState(() {
-        _formCompleted = true;
-      });
-    } else {
-      setState(() {
-        _formCompleted = false;
-      });
-    }
   }
 
   @override
@@ -85,7 +66,6 @@ class _PostEditViewState extends State<PostEditView> {
                       hintText: 'Enter title',
                       action: TextInputAction.next,
                       validator: (value) => Validators.validateTitle(value),
-                      onChanged: (value) => checkValidity(),
                     ),
                     const Gap(20),
                     const CustomInputFieldLabel(
@@ -99,7 +79,6 @@ class _PostEditViewState extends State<PostEditView> {
                       hintText: 'Enter body',
                       action: TextInputAction.done,
                       validator: (value) => Validators.validateBody(value),
-                      onChanged: (value) => checkValidity(),
                     ),
                   ],
                 ),

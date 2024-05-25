@@ -7,3 +7,4 @@ abstract class HomeRepository {
   Future<Post> updatePost(int id, Map<String, dynamic> data);
   Future<Post> deletePost(int id);
 }
+
