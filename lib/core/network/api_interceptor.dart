@@ -23,5 +23,7 @@ class ApiInterceptor extends InterceptorsWrapper {
     logger.e('Error: ${err.message}');
 
     handler.next(err);
+
+  
   }
 }

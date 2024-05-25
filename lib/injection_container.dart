@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -7,7 +8,8 @@ final getIt = GetIt.instance;
 
 void init() {
   // DioClient
-  getIt.registerLazySingleton<DioClient>(() => DioClient.instance);
+  getIt.registerLazySingleton<Dio>(() => Dio());
+  getIt.registerLazySingleton<DioClient>(() => DioClient(getIt<Dio>()));
 
   //Navigator key
   getIt.registerLazySingleton<GlobalKey<NavigatorState>>(
