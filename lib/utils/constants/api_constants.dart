@@ -1,12 +1,12 @@
-
 class ApiConstants {
   ApiConstants._();
 
   //Base URL
-  static final String baseUrl = 'https://jsonplaceholder.typicode.com';
+  static const String baseUrl = 'https://jsonplaceholder.typicode.com';
 
-  //Post 
-  static final String post = '/posts';
+  //Get Posts
+  static const String post = '/posts';
 
-  
+  //Get Post Details
+  static String getPost({required id}) => "/posts/$id";
 }

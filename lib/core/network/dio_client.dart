@@ -6,10 +6,14 @@ import '../../utils/constants/api_constants.dart';
 
 class DioClient implements ApiClient {
   final Dio _dio;
+  String baseUrl = ApiConstants.baseUrl;
 
   DioClient(this._dio) {
     _dio.options.baseUrl = ApiConstants.baseUrl;
     _dio.interceptors.add(ApiInterceptor());
+    _dio.options.headers['Content-Type'] = 'application/json';
+    _dio.options.headers['Accept'] = 'application/json';
+    _dio.options.responseType = ResponseType.json;
   }
 
   @override
@@ -25,6 +29,8 @@ class DioClient implements ApiClient {
       rethrow;
     }
   }
+
+  
 
   @override
   Future<Response> post(String path, {Map<String, dynamic>? data}) async {
@@ -88,5 +94,3 @@ class DioClient implements ApiClient {
     _dio.options.headers.remove('Authorization');
   }
 }
-
-

@@ -34,25 +34,30 @@ class PostTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Title',
-                  style: TextStyle(
-                    color: ColorConstants.textHeader,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: ColorConstants.textHeader,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  'Body',
-                  style: TextStyle(
-                    color: ColorConstants.textBody,
-                    fontSize: 14,
+                  Text(
+                    body,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: ColorConstants.textBody,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Row(
               children: [

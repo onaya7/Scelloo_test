@@ -15,15 +15,17 @@ class ApiInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     logger.i(
         'Response: ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}');
+    logger.i(response.data);
+
     handler.next(response);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    logger.e('Error: ${err.message}');
+    logger.e('Error occured: ${err.message}');
+    logger
+        .d('Entered onError method. Status code: ${err.response?.statusCode}');
 
     handler.next(err);
-
-  
   }
 }
