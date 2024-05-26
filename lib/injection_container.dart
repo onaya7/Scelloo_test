@@ -9,6 +9,8 @@ import 'package:scelloo_test/features/home/domain/usecases/get_posts.dart';
 import 'core/network/api_client.dart';
 import 'core/network/dio_client.dart';
 import 'features/home/data/repositories/home_repository_impl.dart';
+import 'features/home/domain/usecases/delete_post.dart';
+import 'features/home/domain/usecases/update_post.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 
 final getIt = GetIt.instance;
@@ -41,4 +43,10 @@ void init() {
       .registerLazySingleton<GetPosts>(() => GetPosts(getIt<HomeRepository>()));
   getIt.registerLazySingleton<CreatePost>(
       () => CreatePost(getIt<HomeRepository>()));
+  getIt.registerLazySingleton<UpdatePost>(
+      () => UpdatePost(getIt<HomeRepository>()));
+  getIt.registerLazySingleton<DeletePost>(
+      () => DeletePost(getIt<HomeRepository>()));
+
+  
 }

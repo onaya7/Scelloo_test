@@ -10,7 +10,6 @@ import 'package:scelloo_test/utils/helpers/helpers.dart';
 
 import '../../../../componenets/custom_button.dart';
 import '../../../../componenets/custom_refreshindicator.dart';
-import '../../../../injection_container.dart';
 import '../widgets/confirmdelete_bottomsheet.dart';
 import '../widgets/posttile.dart';
 
@@ -25,7 +24,7 @@ class _PostViewState extends State<PostView> {
   @override
   void initState() {
     super.initState();
-    getIt.call<HomeBloc>().add(PostFetchingEvent());
+    context.read<HomeBloc>().add(PostFetchingEvent());
   }
 
   @override
@@ -43,13 +42,19 @@ class _PostViewState extends State<PostView> {
         automaticallyImplyLeading: false,
       ),
       body: BlocConsumer<HomeBloc, HomeState>(
-        bloc: getIt.call<HomeBloc>(),
+        bloc: context.read<HomeBloc>(),
         // listenWhen: (previous, current) => current is HomeActionState,
         // buildWhen: (previous, current) => current is! HomeActionState,
         listener: (context, state) {
           // if (state is PostFetchingErrorState) {
           //   final postErrorState = state;
           //   Helpers.showToast(context, 'error', postErrorState.error);
+          // }
+          // if (state is PostCreateErrorState) {
+          //   final postErrorState = state;
+          //   Helpers.showToast(context, 'error', postErrorState.error);
+          // } else if (state is PostCreateLoadedState) {
+          //   Helpers.showToast(context, 'success', 'Post created successfully');
           // }
         },
         builder: (context, state) {
@@ -77,7 +82,7 @@ class _PostViewState extends State<PostView> {
                         textColor: ColorConstants.white,
                         backgroundColor: ColorConstants.primary,
                         onPressed: () {
-                          getIt.call<HomeBloc>().add(PostFetchingEvent());
+                          context.read<HomeBloc>().add(PostFetchingEvent());
                         }),
                   ],
                 ),
@@ -86,7 +91,7 @@ class _PostViewState extends State<PostView> {
               final postLoadedState = state as PostFetchingLoadedState;
               return CustomRefreshIndicator(
                 onRefresh: () async {
-                  getIt.call<HomeBloc>().add(PostFetchingEvent());
+                  context.read<HomeBloc>().add(PostFetchingEvent());
                 },
                 child: SingleChildScrollView(
                   child: Padding(
@@ -104,25 +109,35 @@ class _PostViewState extends State<PostView> {
                             final body = post.body;
                             final userId = post.userId.toString();
                             final id = post.id.toString();
-
                             return PostTile(
-                              title: title,
-                              body: body,
-                              onPostTileTap: () => Helpers.navigateToPage(
-                                RoutesManager.postDetailRoute,
-                                arguments: {
-                                  'title': title,
-                                  'body': body,
-                                  'userId': userId,
-                                  'id': id,
+                                title: title!,
+                                body: body!,
+                                onPostTileTap: () {
+                                  Helpers.navigateToPage(
+                                    RoutesManager.postDetailRoute,
+                                    arguments: {
+                                      'title': title,
+                                      'body': body,
+                                      'userId': userId,
+                                      'id': id,
+                                    },
+                                  );
                                 },
-                              ),
-                              onEditTap: () => Helpers.navigateToPage(
-                                RoutesManager.postEditRoute,
-                              ),
-                              onDeleteTap: () =>
-                                  ConfirmDeleteBottomSheet.show(context),
-                            );
+                                onEditTap: () {
+                                  Helpers.navigateToPage(
+                                    RoutesManager.postEditRoute,
+                                    arguments: {
+                                      'title': title,
+                                      'body': body,
+                                      'userId': post.userId,
+                                      'id': post.id,
+                                    },
+                                  );
+                                },
+                                onDeleteTap: () {
+                                  ConfirmDeleteBottomSheet.show(context,
+                                      id: post.id!);
+                                });
                           },
                         )
                       ],

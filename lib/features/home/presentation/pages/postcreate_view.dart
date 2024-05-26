@@ -7,7 +7,6 @@ import 'package:scelloo_test/componenets/custom_scaffold.dart';
 import 'package:scelloo_test/utils/helpers/helpers.dart';
 
 import '../../../../componenets/custom_inputfield.dart';
-import '../../../../injection_container.dart';
 import '../../../../utils/constants/color_constants.dart';
 import '../../../../utils/validators/validators.dart';
 import '../bloc/home_bloc.dart';
@@ -69,13 +68,14 @@ class _PostCreateViewState extends State<PostCreateView> {
         ),
       ),
       body: BlocListener<HomeBloc, HomeState>(
-        bloc: getIt.call<HomeBloc>(),
+        bloc: context.read<HomeBloc>(),
         listener: (context, state) {
           if (state is PostCreateErrorState) {
             final postErrorState = state;
             Helpers.showToast(context, 'error', postErrorState.error);
-          } else if (state is PostCreateLoadedState) {
+          } else if (state is PostFetchingLoadedState) {
             Helpers.showToast(context, 'success', 'Post created successfully');
+            Helpers.popPage();
           }
         },
         child: SingleChildScrollView(
@@ -125,6 +125,10 @@ class _PostCreateViewState extends State<PostCreateView> {
                       ? ColorConstants.primary
                       : ColorConstants.neutral300,
                   onPressed: _formCompleted ? () => onContinue(context) : null,
+                  isLoading:
+                      context.watch<HomeBloc>().state is PostCreateLoadingState
+                          ? true
+                          : false,
                 ),
               ],
             ),
@@ -136,15 +140,13 @@ class _PostCreateViewState extends State<PostCreateView> {
 
   onContinue(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      getIt.call<HomeBloc>().add(
-            PostCreateEvent(
-              post: {
-                'title': _titleController.text,
-                'body': _bodyController.text,
-                'userId': 8,
-              },
-            ),
-          );
+      context.read<HomeBloc>().add(PostCreateEvent(
+            post: {
+              'title': _titleController.text,
+              'body': _bodyController.text,
+              'userId': 8,
+            },
+          ));
     }
   }
 }

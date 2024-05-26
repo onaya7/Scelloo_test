@@ -24,7 +24,11 @@ class RoutesGenerator {
       case RoutesManager.postCreateRoute:
         return MaterialPageRoute(builder: (context) => const PostCreateView());
       case RoutesManager.postEditRoute:
-        return MaterialPageRoute(builder: (context) => const PostEditView());
+        return MaterialPageRoute(builder: (context) {
+          Map<String, dynamic> args =
+              settings.arguments as Map<String, dynamic>;
+          return PostEditView(args: args);
+        });
 
       //Default
       default:
