@@ -48,3 +48,5 @@ The code follows best practices for organization, separation of concerns, and ma
 - Code quality, organization, and maintainability
 - Proper error handling and edge case considerations
 
+## Additional Notes
+Link to apk file: [scelloo_test.apk](https://drive.google.com/file/d/1RP4ka7xebmuGqFkPyt3mpDcu3KgUglV5/view?usp=sharing)
