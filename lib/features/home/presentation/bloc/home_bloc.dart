@@ -90,14 +90,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     try {
       // To Delete the post from the backend
-      final deletePost = getIt.get<DeletePost>().call(event.postId);
-
+      // final deletePost = getIt.get<DeletePost>().call(event.postId);
       // To Remove the post from the local list
       final updatedPosts =
           currentState.posts.where((post) => post.id != event.postId).toList();
-
-      logger.i('updatedPosts: $updatedPosts');
-    
       emit(PostFetchingLoadedState(posts: updatedPosts));
     } catch (e) {
       logger.e('An error occurred during post deletion: $e');

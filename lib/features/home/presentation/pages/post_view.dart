@@ -43,25 +43,11 @@ class _PostViewState extends State<PostView> {
       ),
       body: BlocConsumer<HomeBloc, HomeState>(
         bloc: context.read<HomeBloc>(),
-        // listenWhen: (previous, current) => current is HomeActionState,
-        // buildWhen: (previous, current) => current is! HomeActionState,
-        listener: (context, state) {
-          // if (state is PostFetchingErrorState) {
-          //   final postErrorState = state;
-          //   Helpers.showToast(context, 'error', postErrorState.error);
-          // }
-          // if (state is PostCreateErrorState) {
-          //   final postErrorState = state;
-          //   Helpers.showToast(context, 'error', postErrorState.error);
-          // } else if (state is PostCreateLoadedState) {
-          //   Helpers.showToast(context, 'success', 'Post created successfully');
-          // }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           switch (state.runtimeType) {
             case const (PostFetchingLoadingState):
               return const PostTileShimmer();
-
             case const (PostFetchingErrorState):
               final postErrorState = state as PostFetchingErrorState;
               return Center(
